@@ -60,7 +60,8 @@ class test_add_user(unittest.TestCase):
         wd.find_element_by_name("byear").click()
         wd.find_element_by_name("byear").clear()
         wd.find_element_by_name("byear").send_keys(group.byear)
-        wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+        # submit new user creation
+        wd.find_element_by_name("submit").click()
 
     def login(self, wd, username, password):
         wd.find_element_by_name("user").click()
