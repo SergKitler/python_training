@@ -3,7 +3,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 
 import unittest
 
-from group import Group_for_user
+from user import Group_for_user
 
 def is_alert_present(wd):
     try:
