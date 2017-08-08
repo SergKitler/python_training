@@ -1,6 +1,6 @@
 __author__ = 'sergei'
 
-class Group_for_user:
+class Add_user:
 
     def __init__(self,firstname,middlename,lastname,nickname,title,company,email,byear):
         self.firstname = firstname

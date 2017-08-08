@@ -3,7 +3,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 
 import unittest
 
-from user import Group_for_user
+from user import Add_user
 
 def is_alert_present(wd):
     try:
@@ -21,7 +21,7 @@ class test_add_user(unittest.TestCase):
         wd = self.wd
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
-        self.add_new_user(wd, Group_for_user(firstname="Ivan", middlename="Ivanovich", lastname="Sidorov", nickname="TestUser", title="test", company="TestingGroup",
+        self.add_new_user(wd, Add_user(firstname="Ivan", middlename="Ivanovich", lastname="Sidorov", nickname="TestUser", title="test", company="TestingGroup",
                           email="iii@testinggroup.com", byear="1980"))
         self.logout(wd)
 
