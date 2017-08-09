@@ -12,9 +12,10 @@ def app(request):
     request.addfinalizer(fixture.destroy)
     return fixture
 
+
 def test_test_add_user(app):
-    app.login(username="admin", password="secret")
-    app.add_new_user(Add_user(firstname="Ivan", middlename="Ivanovich", lastname="Sidorov", nickname="TestUser", title="test", company="TestingGroup",
+    app.session.login(username="admin", password="secret")
+    app.user.add(Add_user(firstname="Ivan", middlename="Ivanovich", lastname="Sidorov", nickname="TestUser", title="test", company="TestingGroup",
                           email="iii@testinggroup.com", byear="1980"))
-    app.logout()
+    app.session.logout()
 
