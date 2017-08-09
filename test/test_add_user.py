@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from user import Add_user
-from application import Application
+
+from fixture.application import Application
+from model.user import Add_user
+
 
 @pytest.fixture
 def app(request):
