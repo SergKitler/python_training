@@ -8,7 +8,13 @@ class UserHelper:
         wd = self.app.wd
         # init new user creation
         wd.find_element_by_link_text("add new").click()
-        # fill user form
+        #fill user form
+        self.fill_user_form(group)
+        # submit new user creation
+        wd.find_element_by_name("submit").click()
+
+    def fill_user_form(self, group):
+        wd = self.app.wd
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
         wd.find_element_by_name("firstname").send_keys(group.firstname)
@@ -37,8 +43,6 @@ class UserHelper:
         wd.find_element_by_name("byear").click()
         wd.find_element_by_name("byear").clear()
         wd.find_element_by_name("byear").send_keys(group.byear)
-        # submit new user creation
-        wd.find_element_by_name("submit").click()
 
     def delete_first_user(self):
         wd = self.app.wd
@@ -55,3 +59,16 @@ class UserHelper:
         #submit deletion
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
+
+    def edit_first_user_via_deteils(self,group):
+        wd = self.app.wd
+        #select first user
+        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[7]/a/img").click()
+        #start modify user form
+        wd.find_element_by_name("modifiy").click()
+        #fill user form
+        self.fill_user_form(group)
+        #update user edition
+        wd.find_element_by_name("update").click()
+
+

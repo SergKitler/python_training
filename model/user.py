@@ -1,6 +1,6 @@
 __author__ = 'sergei'
 
-class Add_user:
+class User:
 
     def __init__(self,firstname,middlename,lastname,nickname,title,company,email,byear):
         self.firstname = firstname
