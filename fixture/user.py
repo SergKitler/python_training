@@ -71,4 +71,11 @@ class UserHelper:
         #update user edition
         wd.find_element_by_name("update").click()
 
-
+    def edit_first_user_via_edit(self,group):
+        wd = self.app.wd
+        # start modify first user form
+        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
+        #fill user form
+        self.fill_user_form(group)
+        #update user edition
+        wd.find_element_by_name("update").click()
