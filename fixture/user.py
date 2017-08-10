@@ -47,3 +47,11 @@ class UserHelper:
         #submit deletion
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
+
+    def delete_all_user(self):
+        wd = self.app.wd
+        #select all user
+        wd.find_element_by_id("MassCB").click()
+        #submit deletion
+        wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
+        wd.switch_to_alert().accept()
