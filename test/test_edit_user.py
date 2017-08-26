@@ -9,8 +9,8 @@ def test_edit_user_via_details(app):
     user = User(firstname="Mikhael", lastname="Maximilianno")
     user.id = old_user[0].id
     app.user.edit_first_user_via_deteils(user)
+    assert len(old_user)  == app.user.count()
     new_user = app.user.get_user_list()
-    assert len(old_user)  == len(new_user)
     old_user[0] = user
     assert sorted(old_user, key=User.id_or_max) == sorted(new_user, key=User.id_or_max)
 
@@ -21,8 +21,8 @@ def test_edit_user_via_edit(app):
     user = User(firstname="Semen", lastname="Ivanov")
     user.id = old_user[0].id
     app.user.edit_first_user_via_edit(user)
+    assert len(old_user) == app.user.count()
     new_user = app.user.get_user_list()
-    assert len(old_user) == len(new_user)
     old_user[0] = user
     assert sorted(old_user, key=User.id_or_max) == sorted(new_user, key=User.id_or_max)
 
@@ -33,8 +33,8 @@ def test_edit_user_via_birthday_details(app):
     user = User(firstname="Anton", lastname="Banderos", nickname="TestEditUser")
     user.id = old_user[0].id
     app.user.edit_first_user_via_birthday_deteils(user)
+    assert len(old_user) == app.user.count()
     new_user = app.user.get_user_list()
-    assert len(old_user) == len(new_user)
     old_user[0] = user
     assert sorted(old_user, key=User.id_or_max) == sorted(new_user, key=User.id_or_max)
 
@@ -45,7 +45,7 @@ def test_edit_user_via_birthday_edit(app):
     user = User(firstname="Samuil", lastname="Ibragimovich", byear="1976")
     user.id = old_user[0].id
     app.user.edit_first_user_via_birthday_edit(user)
+    assert len(old_user) == app.user.count()
     new_user = app.user.get_user_list()
-    assert len(old_user) == len(new_user)
     old_user[0] = user
     assert sorted(old_user, key=User.id_or_max) == sorted(new_user, key=User.id_or_max)
