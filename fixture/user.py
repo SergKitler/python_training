@@ -14,6 +14,7 @@ class UserHelper:
         self.fill_user_form(user)
         # submit new user creation
         wd.find_element_by_name("submit").click()
+        self.user_cache = None
 
     def fill_user_form(self, user):
         wd = self.app.wd
@@ -44,6 +45,7 @@ class UserHelper:
         #submit deletion
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
+        self.user_cache = None
 
     def delete_all_user(self):
         wd = self.app.wd
@@ -52,6 +54,7 @@ class UserHelper:
         #submit deletion
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
+        self.user_cache = None
 
     def edit_first_user_via_deteils(self,group):
         wd = self.app.wd
@@ -63,6 +66,7 @@ class UserHelper:
         self.fill_user_form(group)
         #update user edition
         wd.find_element_by_name("update").click()
+        self.user_cache = None
 
     def edit_first_user_via_edit(self,group):
         wd = self.app.wd
@@ -72,6 +76,7 @@ class UserHelper:
         self.fill_user_form(group)
         #update user edition
         wd.find_element_by_name("update").click()
+        self.user_cache = None
 
     def edit_first_user_via_birthday_deteils(self,group):
         wd = self.app.wd
@@ -85,6 +90,7 @@ class UserHelper:
         self.fill_user_form(group)
         #update user edition
         wd.find_element_by_name("update").click()
+        self.user_cache = None
 
     def edit_first_user_via_birthday_edit(self,group):
         wd = self.app.wd
@@ -96,6 +102,7 @@ class UserHelper:
         self.fill_user_form(group)
         #update user edition
         wd.find_element_by_name("update").click()
+        self.user_cache = None
 
     def open_birthday_page(self):
         wd = self.app.wd
@@ -113,15 +120,18 @@ class UserHelper:
             wd.find_element_by_link_text("home").click()
         return len(wd.find_elements_by_name("selected[]"))
 
+    user_cache = None
+
     def get_user_list(self):
-        wd = self.app.wd
-        self.open_home_page()
-        users = []
-        for element in wd.find_elements_by_css_selector("table#maintable tr[name=entry]"):
-                cells = element.find_elements_by_tag_name("td")[2]
-                firstname = cells.text
-                cells = element.find_elements_by_tag_name("td")[1]
-                lastname = cells.text
-                id = element.find_element_by_name("selected[]").get_attribute("value")
-                users.append(User(firstname=firstname, lastname=lastname, id=id))
-        return users
+        if self.user_cache is None:
+            wd = self.app.wd
+            self.open_home_page()
+            self.user_cache = []
+            for element in wd.find_elements_by_css_selector("table#maintable tr[name=entry]"):
+                    cells = element.find_elements_by_tag_name("td")[2]
+                    firstname = cells.text
+                    cells = element.find_elements_by_tag_name("td")[1]
+                    lastname = cells.text
+                    id = element.find_element_by_name("selected[]").get_attribute("value")
+                    self.user_cache.append(User(firstname=firstname, lastname=lastname, id=id))
+        return list(self.user_cache)
