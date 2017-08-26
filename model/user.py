@@ -1,5 +1,7 @@
 __author__ = 'sergei'
 
+from sys import maxsize
+
 class User:
     def __init__(self,firstname=None,middlename=None,lastname=None,nickname=None,title=None,company=None,email=None,byear=None,id=None):
         self.firstname = firstname
@@ -16,4 +18,10 @@ class User:
         return "%s:%s:%s" % (self.id, self.firstname, self.lastname)
 
     def __eq__(self, other):
-        return self.id == other.id and self.firstname == other.firstname and self.lastname == other.lastname
+        return (self.id is None or other.id is None or self.id == other.id) and self.firstname == other.firstname and self.lastname == other.lastname
+
+    def id_or_max(self):
+        if self.id:
+            return int(self.id)
+        else:
+            return maxsize
