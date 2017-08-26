@@ -1,8 +1,7 @@
 __author__ = 'sergei'
 
 class User:
-
-    def __init__(self,firstname=None,middlename=None,lastname=None,nickname=None,title=None,company=None,email=None,byear=None):
+    def __init__(self,firstname=None,middlename=None,lastname=None,nickname=None,title=None,company=None,email=None,byear=None,id=None):
         self.firstname = firstname
         self.middlename = middlename
         self.lastname = lastname
@@ -11,3 +10,4 @@ class User:
         self.company = company
         self.email = email
         self.byear = byear
+        self.id = id

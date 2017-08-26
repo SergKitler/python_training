@@ -1,32 +1,34 @@
 __author__ = 'sergei'
 
+from model.user import User
+
 class UserHelper:
     def __init__(self,app):
         self.app = app
 
-    def add(self, group):
+    def add(self, user):
         wd = self.app.wd
         # init new user creation
         wd.find_element_by_link_text("add new").click()
         #fill user form
-        self.fill_user_form(group)
+        self.fill_user_form(user)
         # submit new user creation
         wd.find_element_by_name("submit").click()
 
-    def fill_user_form(self, group):
+    def fill_user_form(self, user):
         wd = self.app.wd
-        self.modify_field_value("firstname",group.firstname)
-        self.modify_field_value("middlename",group.middlename)
-        self.modify_field_value("lastname",group.lastname)
-        self.modify_field_value("nickname",group.nickname)
-        self.modify_field_value("title",group.title)
-        self.modify_field_value("company",group.company)
-        self.modify_field_value("email", group.email)
+        self.modify_field_value("firstname", user.firstname)
+        self.modify_field_value("middlename", user.middlename)
+        self.modify_field_value("lastname", user.lastname)
+        self.modify_field_value("nickname", user.nickname)
+        self.modify_field_value("title", user.title)
+        self.modify_field_value("company", user.company)
+        self.modify_field_value("email", user.email)
         if not wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[12]").is_selected():
             wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[12]").click()
         if not wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[11]").is_selected():
             wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[11]").click()
-        self.modify_field_value("byear", group.byear)
+        self.modify_field_value("byear", user.byear)
 
     def modify_field_value(self, field_name, text):
         wd = self.app.wd
@@ -100,8 +102,26 @@ class UserHelper:
         if not wd.current_url.endswith("/birthdays.php"):
             wd.find_element_by_link_text("next birthdays").click()
 
+    def open_home_page(self):
+        wd = self.app.wd
+        if not wd.current_url.endswith("/"):
+            wd.find_element_by_link_text("home").click()
+
     def count(self):
         wd = self.app.wd
         if not (wd.current_url.endswith("/") and len(wd.find_elements_by_xpath("//table[@id='maintable']//a[.='Last name']")) > 0):
             wd.find_element_by_link_text("home").click()
         return len(wd.find_elements_by_name("selected[]"))
+
+    def get_user_list(self):
+        wd = self.app.wd
+        self.open_home_page()
+        users = []
+        for element in wd.find_elements_by_css_selector("table#maintable tr[name=entry]"):
+                cells = element.find_elements_by_tag_name("td")[2]
+                firstname = cells.text
+                cells = element.find_elements_by_tag_name("td")[1]
+                lastname = cells.text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                users.append(User(firstname=firstname, lastname=lastname, id=id))
+        return users

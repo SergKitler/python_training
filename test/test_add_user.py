@@ -4,5 +4,7 @@ from model.user import User
 
 
 def test_add_user(app):
-    app.user.add(User(firstname="Ivan", middlename="Ivanovich", lastname="Sidorov", nickname="TestUser", title="test", company="TestingGroup",
-                      email="iii@testinggroup.com", byear="1980"))
+    old_user = app.user.get_user_list()
+    app.user.add(User(firstname="Ivan", lastname="Sidorov"))
+    new_user = app.user.get_user_list()
+    assert len(old_user) + 1 == len(new_user)
