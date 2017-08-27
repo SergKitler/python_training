@@ -39,9 +39,12 @@ class UserHelper:
             wd.find_element_by_name(field_name).send_keys(text)
 
     def delete_first_user(self):
+        self.delete_user_by_index(0)
+
+    def delete_user_by_index(self, index):
         wd = self.app.wd
         #select first user
-        wd.find_element_by_name("selected[]").click()
+        wd.find_elements_by_name("selected[]")[index].click()
         #submit deletion
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
@@ -57,9 +60,14 @@ class UserHelper:
         self.user_cache = None
 
     def edit_first_user_via_deteils(self,group):
+        self.edit_user_by_index_via_deteils(0, group)
+
+    def edit_user_by_index_via_deteils(self, index, group):
         wd = self.app.wd
         #select first user
-        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[7]/a/img").click()
+        element = wd.find_elements_by_css_selector("table#maintable tr[name=entry]")[index]
+        cell = element.find_elements_by_tag_name("td")[6]
+        cell.find_element_by_tag_name("a").click()
         #start modify user form
         wd.find_element_by_name("modifiy").click()
         #fill user form
@@ -68,10 +76,15 @@ class UserHelper:
         wd.find_element_by_name("update").click()
         self.user_cache = None
 
-    def edit_first_user_via_edit(self,group):
+    def edit_first_user_via_edit(self, group):
+        self.edit_user_by_index_via_edit(0, group)
+
+    def edit_user_by_index_via_edit(self, index, group):
         wd = self.app.wd
         # start modify first user form
-        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
+        element = wd.find_elements_by_css_selector("table#maintable tr[name=entry]")[index]
+        cell = element.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name("a").click()
         #fill user form
         self.fill_user_form(group)
         #update user edition
