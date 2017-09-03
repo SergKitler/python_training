@@ -7,12 +7,22 @@ import string
 Fname = ["Ivan", "Semen", "Serg", "Konstantin", "Nikolas", "Mosses"]
 Lname = ["Brown", "Kaddi", "Bethoven", "Radzinsky", "Runny", "Kazbek"]
 Address = ["Tomsk", "Los Angeles", "New-York", "Moscow", "Bangladesh"]
+domain = ["mail.ru", "gmail.com", "hotmail.ru", "my.ru"]
 
 def test_add_user(app):
     old_user = app.user.get_user_list()
     user = User(firstname=random.choice(Fname),
                 lastname=random.choice(Lname),
                 address=random.choice(Address),
+                email="@".join([
+                    ''.join([random.choice(string.ascii_letters) for i in range(random.randrange(12))]),
+                        random.choice(domain)]),
+                email2="@".join([
+                    ''.join([random.choice(string.ascii_letters) for i in range(random.randrange(12))]),
+                    random.choice(domain)]),
+                email3="@".join([
+                    ''.join([random.choice(string.ascii_letters) for i in range(random.randrange(12))]),
+                    random.choice(domain)]),
                 home=''.join([random.choice(string.digits) for i in range(10)]),
                 mobile=''.join([random.choice(string.digits) for i in range(10)]),
                 work=''.join([random.choice(string.digits) for i in range(10)]),
