@@ -4,10 +4,15 @@ from model.user import User
 import random
 import string
 
+Fname = ["Ivan", "Semen", "Serg", "Konstantin", "Nikolas", "Mosses"]
+Lname = ["Brown", "Kaddi", "Bethoven", "Radzinsky", "Runny", "Kazbek"]
+Address = ["Tomsk", "Los Angeles", "New-York", "Moscow", "Bangladesh"]
 
 def test_add_user(app):
     old_user = app.user.get_user_list()
-    user = User(firstname="Ivan", lastname="Sidorov",
+    user = User(firstname=random.choice(Fname),
+                lastname=random.choice(Lname),
+                address=random.choice(Address),
                 home=''.join([random.choice(string.digits) for i in range(10)]),
                 mobile=''.join([random.choice(string.digits) for i in range(10)]),
                 work=''.join([random.choice(string.digits) for i in range(10)]),

@@ -24,11 +24,14 @@ class UserHelper:
         self.modify_field_value("nickname", user.nickname)
         self.modify_field_value("title", user.title)
         self.modify_field_value("company", user.company)
+        self.modify_field_value("address", user.address)
         self.modify_field_value("home", user.home)
         self.modify_field_value("work", user.work)
         self.modify_field_value("mobile", user.mobile)
         self.modify_field_value("phone2", user.phone2)
         self.modify_field_value("email", user.email)
+        self.modify_field_value("email2", user.email2)
+        self.modify_field_value("email3", user.email3)
         if not wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[12]").is_selected():
             wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[12]").click()
         if not wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[11]").is_selected():
