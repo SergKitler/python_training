@@ -1,6 +1,8 @@
 __author__ = 'sergei'
 
 from model.user import User
+import re
+
 
 class UserHelper:
     def __init__(self,app):
@@ -10,9 +12,7 @@ class UserHelper:
         wd = self.app.wd
         # init new user creation
         wd.find_element_by_link_text("add new").click()
-        #fill user form
         self.fill_user_form(user)
-        # submit new user creation
         wd.find_element_by_name("submit").click()
         self.user_cache = None
 
@@ -24,6 +24,10 @@ class UserHelper:
         self.modify_field_value("nickname", user.nickname)
         self.modify_field_value("title", user.title)
         self.modify_field_value("company", user.company)
+        self.modify_field_value("home", user.home)
+        self.modify_field_value("work", user.work)
+        self.modify_field_value("mobile", user.mobile)
+        self.modify_field_value("phone2", user.phone2)
         self.modify_field_value("email", user.email)
         if not wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[12]").is_selected():
             wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[12]").click()
@@ -59,37 +63,40 @@ class UserHelper:
         wd.switch_to_alert().accept()
         self.user_cache = None
 
-    def edit_first_user_via_deteils(self,group):
+    def edit_first_user_via_deteils(self, group):
         self.edit_user_by_index_via_deteils(0, group)
 
-    def edit_user_by_index_via_deteils(self, index, group):
+    def edit_user_by_index_via_deteils(self, index, user):
         wd = self.app.wd
-        #select first user
+        self.open_user_view_by_index(index)
+        wd.find_element_by_name("modifiy").click()
+        self.fill_user_form(user)
+        wd.find_element_by_name("update").click()
+        self.user_cache = None
+
+    def open_user_view_by_index(self, index):
+        wd = self.app.wd
+        self.open_home_page()
         element = wd.find_elements_by_css_selector("table#maintable tr[name=entry]")[index]
         cell = element.find_elements_by_tag_name("td")[6]
         cell.find_element_by_tag_name("a").click()
-        #start modify user form
-        wd.find_element_by_name("modifiy").click()
-        #fill user form
-        self.fill_user_form(group)
-        #update user edition
-        wd.find_element_by_name("update").click()
-        self.user_cache = None
 
     def edit_first_user_via_edit(self, group):
         self.edit_user_by_index_via_edit(0, group)
 
     def edit_user_by_index_via_edit(self, index, group):
         wd = self.app.wd
-        # start modify first user form
+        self.open_user_to_edit_by_index(index)
+        self.fill_user_form(group)
+        wd.find_element_by_name("update").click()
+        self.user_cache = None
+
+    def open_user_to_edit_by_index(self, index):
+        wd = self.app.wd
+        self.open_home_page()
         element = wd.find_elements_by_css_selector("table#maintable tr[name=entry]")[index]
         cell = element.find_elements_by_tag_name("td")[7]
         cell.find_element_by_tag_name("a").click()
-        #fill user form
-        self.fill_user_form(group)
-        #update user edition
-        wd.find_element_by_name("update").click()
-        self.user_cache = None
 
     def edit_first_user_via_birthday_deteils(self,group):
         wd = self.app.wd
@@ -97,11 +104,8 @@ class UserHelper:
         self.open_birthday_page()
         #select first user
         wd.find_element_by_xpath("//table[@id='birthdays']/tbody/tr[2]/td[7]/a/img").click()
-        #start modify user form
         wd.find_element_by_name("modifiy").click()
-        #fill user form
         self.fill_user_form(group)
-        #update user edition
         wd.find_element_by_name("update").click()
         self.user_cache = None
 
@@ -111,9 +115,7 @@ class UserHelper:
         self.open_birthday_page()
         # start modify first user form
         wd.find_element_by_xpath("//table[@id='birthdays']/tbody/tr[2]/td[8]/a/img").click()
-        #fill user form
         self.fill_user_form(group)
-        #update user edition
         wd.find_element_by_name("update").click()
         self.user_cache = None
 
@@ -141,10 +143,36 @@ class UserHelper:
             self.open_home_page()
             self.user_cache = []
             for element in wd.find_elements_by_css_selector("table#maintable tr[name=entry]"):
-                    cells = element.find_elements_by_tag_name("td")[2]
-                    firstname = cells.text
-                    cells = element.find_elements_by_tag_name("td")[1]
-                    lastname = cells.text
+                    cells = element.find_elements_by_tag_name("td")
+                    lastname = cells[1].text
+                    firstname = cells[2].text
                     id = element.find_element_by_name("selected[]").get_attribute("value")
-                    self.user_cache.append(User(firstname=firstname, lastname=lastname, id=id))
+                    all_phones = cells[5].text.splitlines()
+                    self.user_cache.append(User(firstname=firstname, lastname=lastname, id=id,
+                                                home=all_phones[0],mobile=all_phones[1],
+                                                work=all_phones[2],phone2=all_phones[3]))
         return list(self.user_cache)
+
+    def get_user_info_from_edit_page(self,index):
+        wd = self.app.wd
+        self.open_user_to_edit_by_index(index)
+        firstname = wd.find_element_by_name("firstname").get_attribute("value")
+        lastname = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        homephone = wd.find_element_by_name("home").get_attribute("value")
+        mobilephone = wd.find_element_by_name("mobile").get_attribute("value")
+        workphone = wd.find_element_by_name("work").get_attribute("value")
+        phone2 = wd.find_element_by_name("phone2").get_attribute("value")
+        return User(firstname=firstname, lastname=lastname, id=id, home=homephone, mobile=mobilephone,
+                    work=workphone, phone2=phone2)
+
+
+    def get_user_from_view_page(self,index):
+        wd = self.app.wd
+        self.open_user_view_by_index(index)
+        text = wd.find_element_by_id("content").text
+        homephone = re.search("H: (.*)", text).group(1)
+        workphone = re.search("W: (.*)", text).group(1)
+        mobilephone = re.search("M: (.*)", text).group(1)
+        phone2 = re.search("P: (.*)", text).group(1)
+        return User(home=homephone, mobile=mobilephone,  work=workphone, phone2=phone2)
