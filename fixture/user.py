@@ -150,10 +150,9 @@ class UserHelper:
                     lastname = cells[1].text
                     firstname = cells[2].text
                     id = element.find_element_by_name("selected[]").get_attribute("value")
-                    all_phones = cells[5].text.splitlines()
+                    all_phones = cells[5].text
                     self.user_cache.append(User(firstname=firstname, lastname=lastname, id=id,
-                                                home=all_phones[0],mobile=all_phones[1],
-                                                work=all_phones[2],phone2=all_phones[3]))
+                                                all_phones_from_page=all_phones))
         return list(self.user_cache)
 
     def get_user_info_from_edit_page(self,index):
