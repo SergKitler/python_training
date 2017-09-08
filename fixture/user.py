@@ -149,9 +149,12 @@ class UserHelper:
                     cells = element.find_elements_by_tag_name("td")
                     lastname = cells[1].text
                     firstname = cells[2].text
-                    id = element.find_element_by_name("selected[]").get_attribute("value")
+                    address = cells[3].text
+                    all_email = cells[4].text
                     all_phones = cells[5].text
+                    id = element.find_element_by_name("selected[]").get_attribute("value")
                     self.user_cache.append(User(firstname=firstname, lastname=lastname, id=id,
+                                                address=address, all_email_from_page=all_email,
                                                 all_phones_from_page=all_phones))
         return list(self.user_cache)
 
@@ -160,12 +163,18 @@ class UserHelper:
         self.open_user_to_edit_by_index(index)
         firstname = wd.find_element_by_name("firstname").get_attribute("value")
         lastname = wd.find_element_by_name("lastname").get_attribute("value")
+        address = wd.find_element_by_name("address").get_attribute("value")
         id = wd.find_element_by_name("id").get_attribute("value")
+        email = wd.find_element_by_name("email").get_attribute("value")
+        email2 = wd.find_element_by_name("email2").get_attribute("value")
+        email3 = wd.find_element_by_name("email3").get_attribute("value")
         homephone = wd.find_element_by_name("home").get_attribute("value")
         mobilephone = wd.find_element_by_name("mobile").get_attribute("value")
         workphone = wd.find_element_by_name("work").get_attribute("value")
         phone2 = wd.find_element_by_name("phone2").get_attribute("value")
-        return User(firstname=firstname, lastname=lastname, id=id, home=homephone, mobile=mobilephone,
+        return User(firstname=firstname, lastname=lastname, id=id, address=address,
+                    email=email, email2=email2, email3=email3,
+                    home=homephone, mobile=mobilephone,
                     work=workphone, phone2=phone2)
 
 
