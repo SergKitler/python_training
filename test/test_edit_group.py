@@ -1,20 +1,19 @@
 __author__ = 'sergei'
 
 from model.group import Group
-from random import randrange
+import random
 
 
 def test_edit_group_name(app, db, check_ui):
      if len(db.get_group_list()) == 0:
           app.group.create(Group(name="TestBeforeEditGroup"))
      old_groups = db.get_group_list()
-     index = randrange(len(old_groups))
-     group = Group(name="TestEditGroup2", header="TestHeader2", footer="TestFooter2")
-     group.id = old_groups[index].id
-     app.group.edit_group_by_index(index, group)
+     group = random.choice(old_groups)
+     group_change = Group(name="TestEditGroup2", header="TestHeader2", footer="TestFooter2")
+     app.group.edit_group_by_id(group.id, group_change)
      assert len(old_groups) == app.group.count()
      new_groups = db.get_group_list()
-     old_groups[index] = group
+     old_groups[old_groups.index(group)] = group_change
      assert old_groups == new_groups
      if check_ui:
           def clean(group):
