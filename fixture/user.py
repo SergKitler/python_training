@@ -32,11 +32,6 @@ class UserHelper:
         self.modify_field_value("email", user.email)
         self.modify_field_value("email2", user.email2)
         self.modify_field_value("email3", user.email3)
-        if not wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[12]").is_selected():
-            wd.find_element_by_xpath("//div[@id='content']/form/select[1]//option[12]").click()
-        if not wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[11]").is_selected():
-            wd.find_element_by_xpath("//div[@id='content']/form/select[2]//option[11]").click()
-        self.modify_field_value("byear", user.byear)
 
     def modify_field_value(self, field_name, text):
         wd = self.app.wd
@@ -56,6 +51,18 @@ class UserHelper:
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
         self.user_cache = None
+
+    def delete_user_by_id(self, id):
+        wd = self.app.wd
+        self.open_home_page()
+        self.select_user_by_id(id)
+        wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
+        wd.switch_to_alert().accept()
+        self.user_cache = None
+
+    def select_user_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("table#maintable input[id='%s']" % id).click()
 
     def delete_all_user(self):
         wd = self.app.wd
@@ -77,12 +84,26 @@ class UserHelper:
         wd.find_element_by_name("update").click()
         self.user_cache = None
 
+    def edit_user_by_id_via_deteils(self, id, user):
+        wd = self.app.wd
+        self.open_user_view_by_id(id)
+        wd.find_element_by_name("modifiy").click()
+        self.fill_user_form(user)
+        wd.find_element_by_name("update").click()
+        self.user_cache = None
+
     def open_user_view_by_index(self, index):
         wd = self.app.wd
         self.open_home_page()
         element = wd.find_elements_by_css_selector("table#maintable tr[name=entry]")[index]
         cell = element.find_elements_by_tag_name("td")[6]
         cell.find_element_by_tag_name("a").click()
+
+    def open_user_view_by_id(self, id):
+        wd = self.app.wd
+        self.open_home_page()
+        wd.find_element_by_css_selector("table#maintable a[href='view.php?id=%s']" % id).click()
+
 
     def edit_first_user_via_edit(self, group):
         self.edit_user_by_index_via_edit(0, group)
@@ -100,6 +121,18 @@ class UserHelper:
         element = wd.find_elements_by_css_selector("table#maintable tr[name=entry]")[index]
         cell = element.find_elements_by_tag_name("td")[7]
         cell.find_element_by_tag_name("a").click()
+
+    def edit_user_by_id_via_edit(self, id, group):
+        wd = self.app.wd
+        self.open_user_to_edit_by_id(id)
+        self.fill_user_form(group)
+        wd.find_element_by_name("update").click()
+        self.user_cache = None
+
+    def open_user_to_edit_by_id(self, id):
+        wd = self.app.wd
+        self.open_home_page()
+        wd.find_element_by_css_selector("table#maintable a[href='edit.php?id=%s']" % id).click()
 
     def edit_first_user_via_birthday_deteils(self,group):
         wd = self.app.wd
