@@ -164,6 +164,7 @@ class UserHelper:
         wd = self.app.wd
         if not wd.current_url.endswith("/"):
             wd.find_element_by_link_text("home").click()
+        #wd.find_element_by_css_selector('form#right option[value=""]').click()
 
     def count(self):
         wd = self.app.wd
@@ -227,3 +228,10 @@ class UserHelper:
         self.select_user_by_id(id)
         wd.find_element_by_css_selector("div#content select[name='to_group']>option[value='%s']" % group_id).click()
         wd.find_element_by_name("add").click()
+
+    def del_user_by_id_from_group(self,id,group_id):
+        wd = self.app.wd
+        self.open_home_page()
+        wd.find_element_by_css_selector("form#right option[value='%s']" % group_id).click()
+        self.select_user_by_id(id)
+        wd.find_element_by_name("remove").click()
