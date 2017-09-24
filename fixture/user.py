@@ -220,3 +220,10 @@ class UserHelper:
         mobilephone = re.search("M: (.*)", text).group(1)
         phone2 = re.search("P: (.*)", text).group(1)
         return User(home=homephone, mobile=mobilephone,  work=workphone, phone2=phone2)
+
+    def add_user_by_id_to_group(self,id,group_id):
+        wd = self.app.wd
+        self.open_home_page()
+        self.select_user_by_id(id)
+        wd.find_element_by_css_selector("div#content select[name='to_group']>option[value='%s']" % group_id).click()
+        wd.find_element_by_name("add").click()

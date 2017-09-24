@@ -1,4 +1,5 @@
 __author__ = 'sergei'
+
 from pony.orm import *
 from datetime import datetime
 from model.group import Group
@@ -33,7 +34,7 @@ class ORMFixture:
         conv[datetime] = convert_mysql_timestamp
         self.db.bind('mysql', host=host, database=name, user=user, password=password, conv=conv)
         self.db.generate_mapping()
-        sql_debug(True)
+        #sql_debug(True)
 
     def convert_groups_to_model(self, groups):
         def convert(group):
@@ -64,4 +65,5 @@ class ORMFixture:
     def get_contacts_not_in_group(self, group):
         orm_group = list(select(g for g in ORMFixture.ORMGroup if g.id == group.id))[0]
         return self.convert_contacts_to_model(list(select(c for c in ORMFixture.ORMContact if c.deprecated is None and orm_group not in c.groups)))
+
 
